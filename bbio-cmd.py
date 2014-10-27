@@ -8,19 +8,73 @@ cmdON = []
 
 cmdOFF = []
 
+listaIO = [0,1,2,3,4]
+listaCmd = ["on","off"]
+
 prompt = '>'
 separador = "++++++++++++++++++++++++++++++"
 pattern = '\/dev\/tty[A-Z]{3}[0-0]*'
 
 
 def listarPuertos(p):
+	print "Leyendo puertos"
 	iterable = serial.tools.list_ports.grep(pattern)
 #	p = serial.tools.list_ports.comports()
 #	print p
+	print "Puertos encontrados:"
 	for i in iterable:
 		p.append(i[0])
 		print i[0]
 	return p
+
+def ingresarPin(lista):
+	statusIO = 1
+
+	print separador
+	print 
+
+	while statusIO:
+		print "IO disponibles:"
+
+		for i in lista:
+			print lista[i]
+
+		print "Ingrese pin que desea controlar"
+		io = raw_input(prompt)
+
+		try:
+			index = lista.index(int(io))
+			statusIO = 0
+		except ValueError:
+			print "Opcion %r desconocida" % io
+			statusIO = 1
+			print "Ingrese otra opcion"
+
+	return index
+
+def ingresarComando(lista):
+	statusCMD = 1
+
+	while statusCMD:
+		print "Comandos disponibles"
+		print
+		for i in lista:
+			print i	
+		print
+		print "Ingresa el comando que deseas enviar"
+		
+		cmd = raw_input(prompt)
+		
+		try:
+			index = lista.index(cmd)
+			statusCMD = 0
+		except ValueError:
+			print "Opcion %r desconocida" % cmd
+			statusCMD = 1
+			print "Ingrese otra opcion"
+
+	return index
+	
 
 def enviarComando(io, cmd):
 	if cmd == "on":
@@ -39,7 +93,7 @@ def iniciarBoard(puerto):
 	except serial.serialutil.SerialException:
 		print "Puerto %s, no encontrado" % puerto	
 	else:
-		print "Puerto %s, abierto" % puerto
+#		print "Puerto %s, abierto" % puerto
 		return boardFun
 
 def recibePin():
@@ -70,7 +124,7 @@ def seleccionarPuerto(p):
 		opciones.append(numero)
 		numero = numero + 1
 	
-	print opciones	
+#	print opciones	
 
 	while status:
 		seleccion = raw_input(prompt)
@@ -97,19 +151,28 @@ def seleccionarPuerto(p):
 puertosDisponibles = []
 
 puertosDisponibles = listarPuertos(puertosDisponibles)
-print "Salio el puerto, se pasa:"
-print puertosDisponibles
-for i in puertosDisponibles:
-	print i
-miIndex = seleccionarPuerto(puertosDisponibles)
-print miPuerto[miIndex]
+index = seleccionarPuerto(puertosDisponibles)
 
+print "Puerto seleccionado: %r" % puertosDisponibles[index]
+puerto = puertosDisponibles[index]
 
-#board = iniciarBoard(puerto)
-#terminarBoard(board)
-#if board.isOpen():
-#	print "sigue abierto"
-#else:
-#	print "yano esta"
+board = iniciarBoard(puerto)
+
+print "Interface con bboard abierta"
+
+ioIndex = ingresarPin(listaIO)
+
+print "IO seleccionado : %d" % listaIO[ioIndex]
+
+cmdIndex = ingresarComando(listaCmd)
+
+print "Comando seleccionado : %s" % listaCmd[cmdIndex]
+
+ 
+terminarBoard(board)
+if board.isOpen():
+	print "sigue abierto"
+else:
+	print "ya no esta"
 
 #print "Exit"	
