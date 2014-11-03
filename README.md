@@ -10,10 +10,10 @@ Bboard-io is a development board that allows xbee users to have accesss to io pi
 That allows to contror digital enviroments remotely with no need of microcontroller.
 
 ###Specs
-*5 io pins (D0 to D4).
-*Usb port (miniUSB connector)
-*Power jack connector
-*Xbee state leds (Assoc, RSSI, ON and Power)
+* 5 io pins (D0 to D4).
+* Usb port (miniUSB connector)
+* Power jack connector
+* Xbee state leds (Assoc, RSSI, ON and Power)
 
 ###General
 IO pins are attached to a level shifter (3.3v to 5v).
