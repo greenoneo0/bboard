@@ -7,5 +7,5 @@ xbee = serial.Serial(puerto,9600)
 
 string_ = sys.argv[1]
 
-xbee.write(string_)
+xbee.write(string_ + "\n" )
 
